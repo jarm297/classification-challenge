@@ -7,11 +7,10 @@ from functools import partial
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin, RegressorMixin
 from sklearn.compose import ColumnTransformer
-from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from sklearn.preprocessing import StandardScaler,KBinsDiscretizer
-from sklearn.ensemble import BaggingRegressor
 
 import data
 
@@ -32,11 +31,11 @@ def build_estimator(config: EstimatorConfig):
 
 def get_estimator_mapping():
     return {
-        "linear-regressor": LinearRegression,
         "logistic-regressor": LogisticRegression,
         "categorical-encoder": CategoricalEncoder,
         "standard-scaler": StandardScaler,
         "discretizer": Discretizer,
+        "average-thalachh": AverageThalachh,
     }
 class CategoricalEncoder(BaseEstimator, TransformerMixin):
     def __init__(self, *, one_hot: bool = False, force_dense_array: bool = False):
@@ -109,3 +108,20 @@ class Discretizer(BaseEstimator, TransformerMixin):
             self._column_transformer.transform(X), columns=self.new_column_order_
         )
         return X
+
+class AverageThalachh(BaseEstimator, RegressorMixin):
+    def fit(self, X, y):
+        df = pd.DataFrame({"thalachh": X["thalachh"], "y": y})
+        self.meanThalachh_ = df.groupby("y").mean().mean().thalachh
+        return self
+
+    def predict(self, X):
+        """Predicts the mode computed in the fit method."""
+
+        def validate_threshold(x):
+            if x > self.meanThalachh_:
+                return 1
+            return 0
+
+        y_pred = X["thalachh"].apply(validate_threshold)
+        return y_pred

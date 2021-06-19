@@ -1,14 +1,10 @@
 estimator:
-  - name: categorical-encoder
-    params:
-      force_dense_array: true
-      one_hot: true
-  - name: standard-scaler
+  - name: average-thalachh
     params: {}
 
 
 data:
-  filepath: "./data/train_regression.csv"
+  filepath: "./data/train_classification.csv"
 
 metrics:
   - name: mean absolute error # same as above
