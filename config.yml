@@ -5,10 +5,6 @@ estimator:
         thalachh: 4
         age: 5
       strategy: kmeans
-  - name: categorical-encoder
-    params:
-      force_dense_array: true
-      one_hot: true
   - name: bagging
     params: {}
 
