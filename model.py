@@ -54,8 +54,8 @@ class CategoricalEncoder(BaseEstimator, TransformerMixin):
         encoder_cls = (
             partial(
                 OneHotEncoder,
+                drop="if_binary",
                 sparse=not self.force_dense_array,
-                handle_unknown = 'ignore',
             )
             if self.one_hot
             else OrdinalEncoder
