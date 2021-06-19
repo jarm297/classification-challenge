@@ -1,0 +1,8 @@
+- name: categorical-encoder
+  params:
+    force_dense_array: true
+    one_hot: true
+- name: standard-scaler
+  params: {}
+- name: logistic-regressor
+  params: {}
