@@ -52,7 +52,11 @@ class CategoricalEncoder(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         self.n_features_in_ = X.shape[1]
         encoder_cls = (
-            partial(OneHotEncoder, drop="first", sparse=not self.force_dense_array)
+            partial(
+                OneHotEncoder,
+                sparse=not self.force_dense_array,
+                handle_unknown = 'ignore',
+            )
             if self.one_hot
             else OrdinalEncoder
         )
