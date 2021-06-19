@@ -7,6 +7,7 @@ from functools import partial
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin, RegressorMixin
 from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import BaggingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
@@ -36,6 +37,7 @@ def get_estimator_mapping():
         "standard-scaler": StandardScaler,
         "discretizer": Discretizer,
         "average-thalachh": AverageThalachh,
+        "bagging": BaggClassifier,
     }
 class CategoricalEncoder(BaseEstimator, TransformerMixin):
     def __init__(self, *, one_hot: bool = False, force_dense_array: bool = False):
@@ -50,7 +52,11 @@ class CategoricalEncoder(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         self.n_features_in_ = X.shape[1]
         encoder_cls = (
-            partial(OneHotEncoder, drop="first", sparse=not self.force_dense_array)
+            partial(
+                OneHotEncoder,
+                drop="if_binary",
+                sparse=not self.force_dense_array,
+            )
             if self.one_hot
             else OrdinalEncoder
         )
@@ -71,7 +77,8 @@ class CategoricalEncoder(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
-        return self._column_transformer.transform(X)
+        X = self._column_transformer.transform(X)
+        return X
 
 class Discretizer(BaseEstimator, TransformerMixin):
     def __init__(self, *, bins_per_column: t.Mapping[str, int], strategy: str):
@@ -125,3 +132,12 @@ class AverageThalachh(BaseEstimator, RegressorMixin):
 
         y_pred = X["thalachh"].apply(validate_threshold)
         return y_pred
+
+class BaggClassifier:
+
+    def fit(self, X, y):
+        self._model = BaggingClassifier().fit(X,y)
+        return self
+
+    def predict(self,X):
+        return self._model.predict(X)
