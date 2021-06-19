@@ -1,5 +1,15 @@
 estimator:
-  - name: average-thalachh
+  - name: discretizer
+    params:
+      bins_per_column:
+        thalachh: 4
+        age: 5
+      strategy: kmeans
+  - name: categorical-encoder
+    params:
+      force_dense_array: true
+      one_hot: true
+  - name: bagging
     params: {}
 
 
@@ -7,7 +17,7 @@ data:
   filepath: "./data/train_classification.csv"
 
 metrics:
-  - name: mean absolute error # same as above
+  - name: f1 score
     params: {}
 
 export:

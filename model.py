@@ -11,6 +11,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from sklearn.preprocessing import StandardScaler,KBinsDiscretizer
+from sklearn.ensemble import BaggingClassifier
 
 import data
 
@@ -36,6 +37,7 @@ def get_estimator_mapping():
         "standard-scaler": StandardScaler,
         "discretizer": Discretizer,
         "average-thalachh": AverageThalachh,
+        "bagging": BaggingClassifier,
     }
 class CategoricalEncoder(BaseEstimator, TransformerMixin):
     def __init__(self, *, one_hot: bool = False, force_dense_array: bool = False):
@@ -71,7 +73,8 @@ class CategoricalEncoder(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
-        return self._column_transformer.transform(X)
+        X = self._column_transformer.transform(X)
+        return X
 
 class Discretizer(BaseEstimator, TransformerMixin):
     def __init__(self, *, bins_per_column: t.Mapping[str, int], strategy: str):
