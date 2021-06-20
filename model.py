@@ -139,8 +139,8 @@ class AverageThalachh(BaseEstimator, RegressorMixin):
 class BaggClassifier:
 
     def fit(self, X, y):
-        #self._model = BaggingClassifier(base_estimator=LogisticRegression(),n_estimators=1000,max_features=0.8).fit(X,y)
-        self._model = BaggingClassifier(base_estimator=GradientBoostingClassifier(subsample=0.8),n_estimators=300).fit(X,y)
+        self._model = BaggingClassifier(base_estimator=LogisticRegression(),n_estimators=500,max_features=0.8).fit(X,y)
+        #self._model = BaggingClassifier(base_estimator=GradientBoostingClassifier(subsample=0.8),n_estimators=300).fit(X,y)
         return self
 
     def predict(self,X):

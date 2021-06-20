@@ -1,8 +1,0 @@
-- name: discretizer
-  params:
-    bins_per_column:
-      age: 5
-      thalachh: 4
-    strategy: kmeans
-- name: bagging
-  params: {}
