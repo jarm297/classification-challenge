@@ -147,7 +147,7 @@ class BaggClassifier:
 class RandomForestModel:
 
     def fit(self, X, y):
-        self._model = RandomForestClassifier(max_depth=10).fit(X,y)
+        self._model = RandomForestClassifier(max_depth=10,class_weight='balanced_subsample',max_features='auto').fit(X,y)
         return self
 
     def predict(self,X):
