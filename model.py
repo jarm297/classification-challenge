@@ -12,6 +12,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from sklearn.preprocessing import StandardScaler,KBinsDiscretizer
+from sklearn.ensemble import RandomForestClassifier
 
 import data
 
@@ -38,6 +39,7 @@ def get_estimator_mapping():
         "discretizer": Discretizer,
         "average-thalachh": AverageThalachh,
         "bagging": BaggClassifier,
+        "RandomForestModel": RandomForestModel,
     }
 class CategoricalEncoder(BaseEstimator, TransformerMixin):
     def __init__(self, *, one_hot: bool = False, force_dense_array: bool = False):
@@ -137,6 +139,15 @@ class BaggClassifier:
 
     def fit(self, X, y):
         self._model = BaggingClassifier().fit(X,y)
+        return self
+
+    def predict(self,X):
+        return self._model.predict(X)
+    
+class RandomForestModel:
+
+    def fit(self, X, y):
+        self._model = RandomForestClassifier(max_depth=10).fit(X,y)
         return self
 
     def predict(self,X):

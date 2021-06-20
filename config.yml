@@ -5,7 +5,7 @@ estimator:
         thalachh: 4
         age: 5
       strategy: kmeans
-  - name: bagging
+  - name: RandomForestModel
     params: {}
 
 
