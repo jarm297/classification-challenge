@@ -13,6 +13,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from sklearn.preprocessing import StandardScaler,KBinsDiscretizer
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 import data
 
@@ -138,7 +139,8 @@ class AverageThalachh(BaseEstimator, RegressorMixin):
 class BaggClassifier:
 
     def fit(self, X, y):
-        self._model = BaggingClassifier().fit(X,y)
+        #self._model = BaggingClassifier(base_estimator=LogisticRegression(),n_estimators=1000,max_features=0.8).fit(X,y)
+        self._model = BaggingClassifier(base_estimator=GradientBoostingClassifier(subsample=0.8),n_estimators=300).fit(X,y)
         return self
 
     def predict(self,X):
@@ -147,7 +149,7 @@ class BaggClassifier:
 class RandomForestModel:
 
     def fit(self, X, y):
-        self._model = RandomForestClassifier(max_depth=10,class_weight='balanced_subsample',max_features='auto').fit(X,y)
+        self._model = RandomForestClassifier(n_estimators=800,max_depth=8,max_features='log2').fit(X,y)
         return self
 
     def predict(self,X):
